@@ -49,25 +49,29 @@ searchForm.addEventListener("submit", (event) => {
 
 	apiTools.params.q = searchData;
 
-	apiTools.getImagesByQuery(apiTools.params)
-		.then(dataArray => {
-			if (dataArray.length === 0) {
+	try {
+		apiTools.getImagesByQuery(apiTools.params)
+			.then(dataArray => {
+				if (dataArray.length === 0) {
+					renderTools.hideLoader();
+					renderTools.clearGallery();
+					toastText(MSG_NO_DATA);
+					return;
+				}
+				renderTools.createGallery(dataArray);
+				renderTools.hideLoader();
+			})
+			.catch((e) => {
 				renderTools.hideLoader();
 				renderTools.clearGallery();
-				toastText(MSG_NO_DATA);
-				return;
-			}
-			renderTools.createGallery(dataArray);
-			renderTools.hideLoader();
-		})
-		.catch((e) => {
-			renderTools.hideLoader();
-			renderTools.clearGallery();
-			toastText(MSG_ERROR)
-		})
-		.finally(() => {
-			renderTools.hideLoader();
-		})
+				toastText(MSG_ERROR)
+			})
+			.finally(() => {
+				renderTools.hideLoader();
+			})
+	} catch (error) {
+		toastText(MSG_ERROR);
+	}
 });
 
 

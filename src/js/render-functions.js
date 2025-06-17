@@ -19,6 +19,11 @@ export function createGallery(images) {
 	gallery.refresh();
 }
 
+export function addGallery(images) {
+	listView.insertAdjacentHTML("beforeend", createGalleryMark(images));
+	gallery.refresh();
+}
+
 export function clearGallery() {
 	listView.innerHTML = "";
 }

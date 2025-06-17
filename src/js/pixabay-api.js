@@ -10,14 +10,14 @@ export const params = {
 	"image_type": "photo",
 	"orientation": "horizontal",
 	"safesearch": "true",
-	"per_page": "99"
+	"per_page": "20"
 };
 
-export function getImagesByQuery(qParams) {
+export async function getImagesByQuery(qParams) {
 	//console.log(URL, qParams);
 	const queryString = new URLSearchParams(qParams).toString();
 
-	return axios(`${URL}?${queryString}`)
+	return await axios(`${URL}?${queryString}`)
 		.then(res => {
 			return res.data.hits;
 		})
