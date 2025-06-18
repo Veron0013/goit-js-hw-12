@@ -24,8 +24,8 @@ function toastText(message) {
 		message: message,
 		messageColor: 'white',
 		color: '#ef4040',
-		position: 'topCenter'
-		//iconUrl: iconPath,
+		position: 'topCenter',
+		iconUrl: iconPath,
 	});
 }
 
