@@ -15,7 +15,6 @@ const searchField = document.querySelector(".input_delay");
 const iconPath = 'error.svg';
 
 let page = 1;
-let perPage = 10;
 
 function toastText(message) {
 	iziToast.show({
