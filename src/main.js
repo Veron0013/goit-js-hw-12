@@ -12,7 +12,7 @@ const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to 
 const searchForm = document.querySelector(".form");
 const searchField = document.querySelector(".input_delay");
 
-const iconPath = './img/error.svg';
+const iconPath = 'error.svg';
 
 let page = 1;
 let perPage = 10;
