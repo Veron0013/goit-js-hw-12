@@ -4,8 +4,6 @@ import "izitoast/dist/css/iziToast.min.css";
 import * as apiTools from "./js/pixabay-api.js"
 import * as renderTools from "./js/render-functions.js"
 
-const iconPath = '/img/error.svg';
-
 const MSG_NO_DATA = "Sorry, there are no images matching your search query. Please, try again!";
 const MSG_ERROR = "Sorry, there is error in your request. Please, try again later!";
 const MSG_ERROR_LENGTH = "Sorry, there is error in your request. Please, try to write more than 3 letters!";
@@ -13,6 +11,11 @@ const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to 
 
 const searchForm = document.querySelector(".form");
 const searchField = document.querySelector(".input_delay");
+
+const iconPath = 'error.svg';
+
+let page = 1;
+let perPage = 10;
 
 function toastText(message) {
 	iziToast.show({

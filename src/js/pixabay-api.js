@@ -10,7 +10,8 @@ export const params = {
 	"image_type": "photo",
 	"orientation": "horizontal",
 	"safesearch": "true",
-	"per_page": "20"
+	"per_page": "15",
+	"page": "1"
 };
 
 export async function getImagesByQuery(qParams) {
