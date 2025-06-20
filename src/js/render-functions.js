@@ -69,7 +69,7 @@ export function setScrollHeight() {
 	const listItem = document.querySelector(".data_list_items");
 	let scrollSpeed = listItem.getBoundingClientRect().height * 2;
 
-	listItem.scrollBy({
+	window.scrollBy({
 		left: 0,
 		top: scrollSpeed * 3,
 		behavior: "smooth"
