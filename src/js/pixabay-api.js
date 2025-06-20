@@ -17,7 +17,7 @@ export const params = {
 export async function getImagesByQuery(qParams) {
 	//console.log(URL, qParams);
 	const queryString = new URLSearchParams(qParams).toString();
-
+	console.log(`${URL}?${queryString}`);
 	return await axios(`${URL}?${queryString}`)
 		.then(res => {
 			return res.data;
