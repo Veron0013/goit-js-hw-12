@@ -20,7 +20,7 @@ export async function getImagesByQuery(qParams) {
 
 	return await axios(`${URL}?${queryString}`)
 		.then(res => {
-			return res.data.hits;
+			return res.data;
 		})
 		.catch(error => {
 			return [];

@@ -31,11 +31,12 @@
 	padding-left: 16px;
 }
 
-.btn_form {
+.btn_form,
+.btn_more {
 	border-radius: 8px;
 	padding: 8px 16px;
 	border-color: transparent;
-	width: 91px;
+	/*width: 91px;*/
 	height: 40px;
 	background: #4e75ff;
 	font-weight: 500;
@@ -45,8 +46,15 @@
 	color: #fff;
 }
 
+.btn_more {
+	margin-top: 40px;
+	margin-bottom: 52px;
+}
+
 .btn_form:hover,
-.btn_form:focus {
+.btn_form:focus,
+.btn_more:hover,
+.btn_more:focus {
 	background-color: #6c8cff;
 	transition: 1600ms cubic-bezier(0.08, 0.8, 0.2, 1);
 }

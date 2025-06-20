@@ -11,10 +11,15 @@ const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to 
 
 const searchForm = document.querySelector(".form");
 const searchField = document.querySelector(".input_delay");
+const btnLoadMore = document.querySelector(".btn_more");
+const loader = document.querySelector(".loader_cont");
 
 const iconPath = 'error.svg';
 
+const per_page = 15;
+
 let page = 1;
+let totalQueryPages = 0;
 
 function toastText(message) {
 	iziToast.show({
@@ -39,41 +44,76 @@ function checkValidate(searchData) {
 	return true;
 }
 
-searchForm.addEventListener("submit", (event) => {
+searchForm.addEventListener("submit", async (e) => {
+	console.log("search");
 
-	event.preventDefault();
+	e.preventDefault();
+	renderTools.clearGallery();
+	try {
+		await handleApiData();
+	} catch (error) {
+		toastText(MSG_ERROR);
+	}
+});
+
+async function handleApiData() {
 	const searchData = searchField.value.trim();
 
 	if (!checkValidate(searchData)) {
 		return;
 	}
-	renderTools.showLoader();
+	renderTools.showViewElement(loader);
 
 	apiTools.params.q = searchData;
+	apiTools.params.page = page;
+	apiTools.params.per_page = per_page;
 
 	try {
 		apiTools.getImagesByQuery(apiTools.params)
 			.then(dataArray => {
-				if (dataArray.length === 0) {
-					renderTools.hideLoader();
+				if (dataArray.hits.length === 0) {
+					renderTools.hideViewElement(loader);
 					renderTools.clearGallery();
 					toastText(MSG_NO_DATA);
 					return;
 				}
-				renderTools.createGallery(dataArray);
-				renderTools.hideLoader();
+				renderTools.createGallery(dataArray.hits);
+				renderTools.hideViewElement(loader);
+				totalQueryPages = Math.floor(dataArray.totalHits / per_page);
+				console.log(page, per_page, totalQueryPages);
+
+				btnLoadMore.disabled = false;
+
+				if (page >= totalQueryPages) {
+					renderTools.hideViewElement(btnLoadMore);
+				} else if (page <= totalQueryPages) {
+					renderTools.showViewElement(btnLoadMore)
+				}
+				renderTools.setScrollHeight();
 			})
 			.catch((e) => {
-				renderTools.hideLoader();
+				renderTools.hideViewElement(loader);
 				renderTools.clearGallery();
 				toastText(MSG_ERROR)
 			})
 			.finally(() => {
-				renderTools.hideLoader();
+				renderTools.hideViewElement(loader);
 			})
 	} catch (error) {
 		toastText(MSG_ERROR);
 	}
-});
+}
+
+btnLoadMore.addEventListener("click", async (e) => {
+	btnLoadMore.disabled = true;
+	page++;
+	try {
+		await handleApiData();
+		renderTools.setScrollHeight();
+	} catch (error) {
+		toastText(MSG_ERROR);
+	}
+})
+
 
 

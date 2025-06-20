@@ -3,7 +3,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
 const listView = document.querySelector(".gallery")
-const loader = document.querySelector(".loader_cont");
 
 let gallery = new SimpleLightbox('.gallery a', {
 	captions: true,
@@ -15,11 +14,6 @@ let gallery = new SimpleLightbox('.gallery a', {
 
 
 export function createGallery(images) {
-	listView.innerHTML = createGalleryMark(images);
-	gallery.refresh();
-}
-
-export function addGallery(images) {
 	listView.insertAdjacentHTML("beforeend", createGalleryMark(images));
 	gallery.refresh();
 }
@@ -28,12 +22,12 @@ export function clearGallery() {
 	listView.innerHTML = "";
 }
 
-export function showLoader() {
-	loader.classList.remove("hidden");
+export function showViewElement(targetElement) {
+	targetElement.classList.remove("hidden");
 }
 
-export function hideLoader() {
-	loader.classList.add("hidden");
+export function hideViewElement(targetElement) {
+	targetElement.classList.add("hidden");
 }
 
 function createGalleryMark(images) {
@@ -68,4 +62,17 @@ function createGalleryMark(images) {
 	})
 		.filter(el => el !== null)
 		.join("");
+}
+
+export function setScrollHeight() {
+
+	const listItem = document.querySelector(".data_list_items");
+	let scrollSpeed = listItem.getBoundingClientRect().height * 2;
+
+	listItem.scrollBy({
+		left: 0,
+		top: scrollSpeed * 3,
+		behavior: "smooth"
+	});
+	console.log("scroll", scrollSpeed);
 }
