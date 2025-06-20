@@ -71,8 +71,8 @@ export function setScrollHeight() {
 
 	window.scrollBy({
 		left: 0,
-		top: scrollSpeed * 3,
+		top: scrollSpeed,
 		behavior: "smooth"
 	});
-	console.log("scroll", scrollSpeed);
+	//console.log("scroll", scrollSpeed);
 }
