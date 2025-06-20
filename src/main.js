@@ -68,6 +68,9 @@ async function handleApiData() {
 	apiTools.params.page = page;
 	apiTools.params.per_page = per_page;
 
+	console.log(apiTools.params);
+
+
 	try {
 		apiTools.getImagesByQuery(apiTools.params)
 			.then(dataArray => {
