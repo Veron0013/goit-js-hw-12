@@ -37,11 +37,10 @@ function toastText(message) {
 }
 
 function checkValidate(searchData) {
-	//if (searchData.length < 3) {
-	//	toastText(MSG_ERROR_LENGTH);
-	//	return false;
-	//} else
-	if (/^\d+$/.test(searchData)) {
+	if (searchData.length < 1) {
+		toastText(MSG_ERROR_LENGTH);
+		return false;
+	} else if (/^\d+$/.test(searchData)) {
 		toastText(MSG_ERROR_DIGITS);
 		return false;
 	}
