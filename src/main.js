@@ -48,8 +48,7 @@ function checkValidate(searchData) {
 }
 
 searchForm.addEventListener("submit", (e) => {
-	console.log("search");
-
+	//console.log("search");
 	e.preventDefault();
 
 	page = 1;
@@ -64,6 +63,7 @@ function handleApiData() {
 		return;
 	}
 	renderTools.showViewElement(loader);
+	renderTools.hideViewElement(btnLoadMore);
 
 	try {
 		getImagesByQuery(searchData, page)
@@ -80,8 +80,6 @@ function handleApiData() {
 				//console.log(page, per_page, totalQueryPages);
 
 				if (page >= totalQueryPages) {
-
-					renderTools.hideViewElement(btnLoadMore);
 					toastText(MSG_END_CONTENT);
 				} else if (page <= totalQueryPages) {
 					renderTools.showViewElement(btnLoadMore);
