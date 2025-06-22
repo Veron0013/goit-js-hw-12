@@ -8,7 +8,7 @@ import getImagesByQuery from "./js/pixabay-api.js";
 
 const MSG_NO_DATA = "Sorry, there are no images matching your search query. Please, try again!";
 const MSG_ERROR = "Sorry, there is error in your request. Please, try again later!";
-//const MSG_ERROR_LENGTH = "Sorry, there is error in your request. Please, try to write more than 3 letters!";
+const MSG_ERROR_LENGTH = "Sorry, there is error in your request. Please, try to write at least 2 letters!";
 const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to write not only digits!";
 const MSG_END_CONTENT = "Sorry, there is nothing to show more!";
 
@@ -22,7 +22,7 @@ const iconPath = 'error.svg';
 const per_page = 15;
 
 let page = 1;
-let totalQueryPages = 0;
+let totalQueryPages = 1;
 
 function toastText(message) {
 	iziToast.show({
@@ -47,65 +47,63 @@ function checkValidate(searchData) {
 	return true;
 }
 
-searchForm.addEventListener("submit", (e) => {
+searchForm.addEventListener("submit", async (e) => {
 	//console.log("search");
 	e.preventDefault();
 
 	page = 1;
-	renderTools.clearGallery();
-	handleApiData();
+	await handleApiData();
 });
 
-function handleApiData() {
+async function handleApiData() {
 	const searchData = searchField.value.trim();
+
+	renderTools.hideViewElement(btnLoadMore);
 
 	if (!checkValidate(searchData)) {
 		return;
 	}
+
 	renderTools.showViewElement(loader);
-	renderTools.hideViewElement(btnLoadMore);
 
 	try {
-		getImagesByQuery(searchData, page)
-			.then(dataArray => {
-				if (dataArray.hits.length === 0) {
-					renderTools.hideViewElement(loader);
-					renderTools.clearGallery();
-					toastText(MSG_NO_DATA);
-					return;
-				}
-				renderTools.createGallery(dataArray.hits);
-				renderTools.hideViewElement(loader);
-				totalQueryPages = Math.max(Math.floor(dataArray.totalHits / per_page), 1);
-				//console.log(page, per_page, totalQueryPages);
+		const dataArray = await getImagesByQuery(searchData, page);
+		//console.log(dataArray);
 
-				if (page >= totalQueryPages) {
-					toastText(MSG_END_CONTENT);
-				} else if (page <= totalQueryPages) {
-					renderTools.showViewElement(btnLoadMore);
-				}
-				renderTools.setScrollHeight();
-			})
-			.catch((e) => {
-				renderTools.hideViewElement(loader);
-				renderTools.hideViewElement(btnLoadMore);
-				renderTools.clearGallery();
-				toastText(MSG_ERROR)
-			})
-			.finally(() => {
-				renderTools.hideViewElement(loader);
-				btnLoadMore.disabled = false;
-			})
+		if (dataArray.hits.length === 0) {
+			renderTools.hideViewElement(loader);
+			renderTools.clearGallery();
+			toastText(MSG_NO_DATA);
+			return;
+		}
+
+		renderTools.clearGallery();
+		renderTools.createGallery(dataArray.hits);
+		renderTools.hideViewElement(loader);
+		totalQueryPages = Math.max(Math.floor(dataArray.totalHits / per_page), 1);
+		//console.log(page, per_page, totalQueryPages);
+
+		btnLoadMore.disabled = false;
+		renderTools.showViewElement(btnLoadMore);
+		renderTools.setScrollHeight();
+
+		if (page >= totalQueryPages) {
+			renderTools.hideViewElement(btnLoadMore);
+			toastText(MSG_END_CONTENT);
+		}
+
 	} catch (error) {
+		renderTools.hideViewElement(loader);
+		renderTools.hideViewElement(btnLoadMore);
 		toastText(MSG_ERROR);
 	}
 }
 
-btnLoadMore.addEventListener("click", (e) => {
+btnLoadMore.addEventListener("click", async (e) => {
 	page++;
 
 	btnLoadMore.disabled = true;
-	handleApiData();
+	await handleApiData();
 	renderTools.setScrollHeight();
 })
 
