@@ -65,16 +65,3 @@ function createGalleryMark(images) {
 		.filter(el => el !== null)
 		.join("");
 }
-
-export function setScrollHeight() {
-
-	const listItem = document.querySelector(".data_list_items");
-	let scrollSpeed = listItem.getBoundingClientRect().height;
-
-	window.scrollBy({
-		left: 0,
-		top: scrollSpeed * 2,
-		behavior: "smooth"
-	});
-	//console.log("scroll", scrollSpeed);
-}

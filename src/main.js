@@ -77,13 +77,6 @@ async function handleApiData() {
 		}
 		eventOnSuccess(dataArray);
 
-		//renderTools.setScrollHeight();
-
-		if (page >= totalQueryPages) {
-			renderTools.hideViewElement(btnLoadMore);
-			toastText(MSG_END_CONTENT);
-		}
-
 	} catch (error) {
 		evenOnError(MSG_ERROR);
 	}
@@ -95,7 +88,7 @@ btnLoadMore.addEventListener("click", async (e) => {
 	btnLoadMore.disabled = true;
 	await handleApiData();
 	//console.log("render");
-	renderTools.setScrollHeight();
+	setScrollHeight();
 })
 
 function eventOnSuccess(dataArray) {
@@ -103,18 +96,34 @@ function eventOnSuccess(dataArray) {
 	renderTools.createGallery(dataArray.hits);
 	renderTools.hideViewElement(loader);
 
-	totalQueryPages = Math.max(Math.floor(dataArray.totalHits / per_page), 1);
+	totalQueryPages = Math.max(Math.ceil(dataArray.totalHits / per_page), 1);
 	//console.log(page, per_page, totalQueryPages);
-
-	renderTools.showViewElement(btnLoadMore);
-	btnLoadMore.disabled = false;
+	if (page >= totalQueryPages) {
+		renderTools.hideViewElement(btnLoadMore);
+		toastText(MSG_END_CONTENT);
+	} else {
+		renderTools.showViewElement(btnLoadMore);
+		btnLoadMore.disabled = false;
+	}
 }
 
 function evenOnError(message) {
-	renderTools.clearGallery();
+	//renderTools.clearGallery();
 	renderTools.hideViewElement(loader);
-	renderTools.hideViewElement(btnLoadMore);
+	//renderTools.hideViewElement(btnLoadMore);
 	toastText(message);
+}
+
+function setScrollHeight() {
+
+	const listItem = document.querySelector(".data_list_items");
+	let scrollSpeed = listItem.getBoundingClientRect().height;
+
+	window.scrollBy({
+		left: 0,
+		top: scrollSpeed * 2,
+		behavior: "smooth"
+	});
 }
 
 
