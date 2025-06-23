@@ -69,7 +69,7 @@ async function handleApiData() {
 
 	try {
 		const dataArray = await getImagesByQuery(searchData, page);
-		console.log(searchData, page);
+		//console.log(searchData, page);
 
 		if (dataArray.hits.length === 0) {
 			evenOnError(MSG_NO_DATA);
@@ -94,7 +94,7 @@ btnLoadMore.addEventListener("click", async (e) => {
 
 	btnLoadMore.disabled = true;
 	await handleApiData();
-	console.log("render");
+	//console.log("render");
 	renderTools.setScrollHeight();
 })
 
