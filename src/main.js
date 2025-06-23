@@ -52,6 +52,7 @@ searchForm.addEventListener("submit", async (e) => {
 	e.preventDefault();
 
 	page = 1;
+	renderTools.clearGallery();
 	await handleApiData();
 });
 
@@ -68,24 +69,15 @@ async function handleApiData() {
 
 	try {
 		const dataArray = await getImagesByQuery(searchData, page);
-		//console.log(dataArray);
+		console.log(searchData, page);
 
 		if (dataArray.hits.length === 0) {
-			renderTools.hideViewElement(loader);
-			renderTools.clearGallery();
-			toastText(MSG_NO_DATA);
+			evenOnError(MSG_NO_DATA);
 			return;
 		}
+		eventOnSuccess(dataArray);
 
-		renderTools.clearGallery();
-		renderTools.createGallery(dataArray.hits);
-		renderTools.hideViewElement(loader);
-		totalQueryPages = Math.max(Math.floor(dataArray.totalHits / per_page), 1);
-		//console.log(page, per_page, totalQueryPages);
-
-		btnLoadMore.disabled = false;
-		renderTools.showViewElement(btnLoadMore);
-		renderTools.setScrollHeight();
+		//renderTools.setScrollHeight();
 
 		if (page >= totalQueryPages) {
 			renderTools.hideViewElement(btnLoadMore);
@@ -93,9 +85,7 @@ async function handleApiData() {
 		}
 
 	} catch (error) {
-		renderTools.hideViewElement(loader);
-		renderTools.hideViewElement(btnLoadMore);
-		toastText(MSG_ERROR);
+		evenOnError(MSG_ERROR);
 	}
 }
 
@@ -104,8 +94,27 @@ btnLoadMore.addEventListener("click", async (e) => {
 
 	btnLoadMore.disabled = true;
 	await handleApiData();
+	console.log("render");
 	renderTools.setScrollHeight();
 })
 
+function eventOnSuccess(dataArray) {
+
+	renderTools.createGallery(dataArray.hits);
+	renderTools.hideViewElement(loader);
+
+	totalQueryPages = Math.max(Math.floor(dataArray.totalHits / per_page), 1);
+	//console.log(page, per_page, totalQueryPages);
+
+	renderTools.showViewElement(btnLoadMore);
+	btnLoadMore.disabled = false;
+}
+
+function evenOnError(message) {
+	renderTools.clearGallery();
+	renderTools.hideViewElement(loader);
+	renderTools.hideViewElement(btnLoadMore);
+	toastText(message);
+}
 
 

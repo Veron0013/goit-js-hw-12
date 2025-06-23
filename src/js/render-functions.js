@@ -15,6 +15,8 @@ let gallery = new SimpleLightbox('.gallery a', {
 
 export function createGallery(images) {
 	listView.insertAdjacentHTML("beforeend", createGalleryMark(images));
+	console.log(images);
+
 	gallery.refresh();
 }
 
@@ -69,7 +71,10 @@ export function setScrollHeight() {
 	const listItem = document.querySelector(".data_list_items");
 	let scrollSpeed = listItem.getBoundingClientRect().height * 2;
 
-	window.scrollBy({
+	console.log("scroll");
+
+
+	listItem.scrollBy({
 		left: 0,
 		top: scrollSpeed,
 		behavior: "smooth"
