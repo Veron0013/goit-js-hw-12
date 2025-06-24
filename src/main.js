@@ -70,7 +70,7 @@ btnLoadMore.addEventListener("click", async (e) => {
 async function handleApiData(searchData) {
 	//const searchData = searchField.value.trim();
 
-	//renderTools.hideViewElement(btnLoadMore);
+	renderTools.hideViewElement(btnLoadMore);
 	renderTools.showViewElement(loader);
 
 	if (!checkValidate(searchData)) {
@@ -81,7 +81,7 @@ async function handleApiData(searchData) {
 		const dataArray = await getImagesByQuery(searchData, page);
 
 		if (dataArray.hits.length === 0) {
-			renderTools.hideViewElement(btnLoadMore);
+			//renderTools.hideViewElement(btnLoadMore);
 			toastText(MSG_NO_DATA);
 			return;
 		}
