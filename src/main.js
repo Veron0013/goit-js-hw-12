@@ -8,7 +8,7 @@ import getImagesByQuery from "./js/pixabay-api.js";
 
 const MSG_NO_DATA = "Sorry, there are no images matching your search query. Please, try again!";
 const MSG_ERROR = "Sorry, there is error in your request. Please, try again later!";
-const MSG_ERROR_LENGTH = "Sorry, there is error in your request. Please, try to write at least 2 letters!";
+const MSG_ERROR_LENGTH = "Sorry, there is error in your request. Please, try to write at least 1 letter!";
 const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to write not only digits!";
 const MSG_END_CONTENT = "Sorry, there is nothing to show more!";
 
@@ -111,7 +111,7 @@ function eventOnSuccess(dataArray) {
 
 function setScrollHeight() {
 
-	const listItem = document.querySelector(".data_list_items");
+	const listItem = document.querySelector('.gallery').firstElementChild;
 	let scrollSpeed = listItem.getBoundingClientRect().height;
 
 	window.scrollBy({
