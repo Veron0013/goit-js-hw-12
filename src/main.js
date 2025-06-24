@@ -74,6 +74,7 @@ async function handleApiData(searchData) {
 	renderTools.showViewElement(loader);
 
 	if (!checkValidate(searchData)) {
+		renderTools.hideViewElement(loader);
 		return;
 	}
 
@@ -86,11 +87,11 @@ async function handleApiData(searchData) {
 			return;
 		}
 		eventOnSuccess(dataArray);
+
 	} catch (error) {
 		toastText(MSG_ERROR);
 	} finally {
 		renderTools.hideViewElement(loader);
-		btnLoadMore.disabled = false;
 	}
 }
 
@@ -106,6 +107,7 @@ function eventOnSuccess(dataArray) {
 		toastText(MSG_END_CONTENT);
 	} else {
 		renderTools.showViewElement(btnLoadMore);
+		btnLoadMore.disabled = false;
 	}
 }
 
