@@ -53,48 +53,51 @@ searchForm.addEventListener("submit", async (e) => {
 
 	page = 1;
 	renderTools.clearGallery();
-	await handleApiData();
+	const searchData = e.currentTarget.elements['search-text'].value.trim();
+	await handleApiData(searchData);
 });
-
-async function handleApiData() {
-	const searchData = searchField.value.trim();
-
-	renderTools.hideViewElement(btnLoadMore);
-
-	if (!checkValidate(searchData)) {
-		return;
-	}
-
-	renderTools.showViewElement(loader);
-
-	try {
-		const dataArray = await getImagesByQuery(searchData, page);
-		//console.log(searchData, page);
-
-		if (dataArray.hits.length === 0) {
-			evenOnError(MSG_NO_DATA);
-			return;
-		}
-		eventOnSuccess(dataArray);
-
-	} catch (error) {
-		evenOnError(MSG_ERROR);
-	}
-}
 
 btnLoadMore.addEventListener("click", async (e) => {
 	page++;
 
 	btnLoadMore.disabled = true;
-	await handleApiData();
+	const searchData = searchField.value.trim();
+	await handleApiData(searchData);
 	//console.log("render");
 	setScrollHeight();
 })
 
+async function handleApiData(searchData) {
+	//const searchData = searchField.value.trim();
+
+	//renderTools.hideViewElement(btnLoadMore);
+	renderTools.showViewElement(loader);
+
+	if (!checkValidate(searchData)) {
+		return;
+	}
+
+	try {
+		const dataArray = await getImagesByQuery(searchData, page);
+
+		if (dataArray.hits.length === 0) {
+			renderTools.hideViewElement(btnLoadMore);
+			toastText(MSG_NO_DATA);
+			return;
+		}
+		eventOnSuccess(dataArray);
+	} catch (error) {
+		toastText(MSG_ERROR);
+	} finally {
+		renderTools.hideViewElement(loader);
+		btnLoadMore.disabled = false;
+	}
+}
+
 function eventOnSuccess(dataArray) {
 
 	renderTools.createGallery(dataArray.hits);
-	renderTools.hideViewElement(loader);
+	//renderTools.hideViewElement(loader);
 
 	totalQueryPages = Math.max(Math.ceil(dataArray.totalHits / per_page), 1);
 	//console.log(page, per_page, totalQueryPages);
@@ -103,15 +106,7 @@ function eventOnSuccess(dataArray) {
 		toastText(MSG_END_CONTENT);
 	} else {
 		renderTools.showViewElement(btnLoadMore);
-		btnLoadMore.disabled = false;
 	}
-}
-
-function evenOnError(message) {
-	//renderTools.clearGallery();
-	renderTools.hideViewElement(loader);
-	//renderTools.hideViewElement(btnLoadMore);
-	toastText(message);
 }
 
 function setScrollHeight() {
