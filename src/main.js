@@ -13,7 +13,7 @@ const MSG_ERROR_DIGITS = "Sorry, there is error in your request. Please, try to 
 const MSG_END_CONTENT = "Sorry, there is nothing to show more!";
 
 const searchForm = document.querySelector(".form");
-const searchField = document.querySelector(".input_delay");
+//const searchField = document.querySelector(".input_delay");
 const btnLoadMore = document.querySelector(".btn_more");
 const loader = document.querySelector(".loader_cont");
 
@@ -61,7 +61,7 @@ btnLoadMore.addEventListener("click", async (e) => {
 	page++;
 
 	btnLoadMore.disabled = true;
-	const searchData = searchField.value.trim();
+	const searchData = searchForm.elements['search-text'].value.trim();
 	await handleApiData(searchData);
 	//console.log("render");
 	setScrollHeight();
@@ -92,6 +92,9 @@ async function handleApiData(searchData) {
 		toastText(MSG_ERROR);
 	} finally {
 		renderTools.hideViewElement(loader);
+		if (page < totalQueryPages) {
+			btnLoadMore.disabled = false;
+		}
 	}
 }
 
@@ -107,7 +110,6 @@ function eventOnSuccess(dataArray) {
 		toastText(MSG_END_CONTENT);
 	} else {
 		renderTools.showViewElement(btnLoadMore);
-		btnLoadMore.disabled = false;
 	}
 }
 
